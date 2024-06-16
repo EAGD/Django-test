@@ -1,5 +1,4 @@
 
-
 INSERT INTO CAMION (PATENTE) VALUES ('HYBF59');
 INSERT INTO CAMION (PATENTE) VALUES ('FTWE45');
 INSERT INTO CAMION (PATENTE) VALUES ('HGMN77');
@@ -38,9 +37,9 @@ INSERT INTO USUARIO(RUT, NOMBRES, APELLIDOS, FK_ID_TIPO_USUARIO) VALUES ('195324
 INSERT INTO USUARIO(RUT, NOMBRES, APELLIDOS, FK_ID_TIPO_USUARIO) VALUES ('22943929-4','MILENA SOFIA','MUÑOZ CARO',1);
 --SELECT * FROM USUARIO
 
-UPDATE usuario
-	SET FK_ID_TIPO_USUARIO = 3
-	WHERE usuario.id_usuario = 3
+--UPDATE usuario
+--	SET FK_ID_TIPO_USUARIO = 3
+--	WHERE usuario.id_usuario = 3
 
 SELECT
 	U.*
@@ -90,22 +89,38 @@ INSERT INTO tipo_despacho(descripcion) VALUES
 ------------------------SIMULACION DE DESPACHO-------------------------------------
 
 
-INSERT INTO guia(FECHA) VALUES ('15-06-2024')
-INSERT INTO guia(FECHA) VALUES ('15-06-2024')
+INSERT INTO guia(FECHA) VALUES ('15-06-2024');
+INSERT INTO guia(FECHA) VALUES ('15-06-2024');
 
 --SELECT * FROM GUIA
 
 
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (3, '15-06-2024', 1,2);
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (2, '15-06-2024', 2,2);
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (6, '15-06-2024', 3,2);
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (1, '15-06-2024', 4,2);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (3, '15-06-2024', 1,1);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (2, '15-06-2024', 2,1);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (6, '15-06-2024', 3,1);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (1, '15-06-2024', 4,1);
 
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (2, '15-06-2024', 4,3);
-INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (1, '15-06-2024', 4,3);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (2, '15-06-2024', 4,2);
+INSERT INTO detalle_guia (CANTIDAD, FECHA, FK_ID_PRODUCTO, FK_ID_GUIA) VALUES (1, '15-06-2024', 4,2);
 
 -- SELECT * FROM DETALLE_GUIA
  
+
+
+SELECT 
+	G.id_guia
+	, G.TOTAL
+	, G.FECHA
+	, P.descripcion
+	, D.cantidad
+FROM GUIA G
+JOIN DETALLE_GUIA D
+ON G.id_guia = D.fk_id_guia
+JOIN PRODUCTO P
+ON P.id_producto = D.fk_id_producto
+WHERE G.id_guia = 1
+
+
 
 
 SELECT 
@@ -123,37 +138,21 @@ WHERE G.id_guia = 2
 
 
 
-
-SELECT 
-	G.id_guia
-	, G.TOTAL
-	, G.FECHA
-	, P.descripcion
-	, D.cantidad
-FROM GUIA G
-JOIN DETALLE_GUIA D
-ON G.id_guia = D.fk_id_guia
-JOIN PRODUCTO P
-ON P.id_producto = D.fk_id_producto
-WHERE G.id_guia = 3
-
-
-
 -----------------------
 
 ALTER TABLE RUTA
- ADD DIRECCION VARCHAR(200) NULL
+ADD DIRECCION VARCHAR(200) NULL
 
 SELECT * FROM RUTA 
 
 INSERT INTO RUTA (DIRECCION, DETALLE, FK_ID_CIUDAD) VALUES ('EL PINO 845 LAS LOMAS DE SANTA MARIA','MINI MARKET DOÑA CARNE', 7)
 
-	DELETE FROM RUTA
+--DELETE FROM RUTA
 
 
 
-INSERT INTO despacho (fk_id_guia,fk_id_usuario_1,fk_id_usuario_2,fk_id_ruta,fk_id_camion,fk_id_tipo_despacho) VALUES 
-(2, 1, 3, 2, 14, 1)
+INSERT INTO despacho (fk_id_guia,ESTADO,fk_id_usuario_1,fk_id_usuario_2,fk_id_ruta,fk_id_camion,fk_id_tipo_despacho) VALUES 
+(2, 'En camino', 1, 3, 1, 4, 1)
 
 
 
@@ -168,6 +167,7 @@ SELECT
 	, U2.nombres
 	, C.patente
 	, DES.descripcion
+	, D.ESTADO
 FROM DESPACHO D
 	JOIN usuario U
 	ON U.id_usuario = D.fk_id_usuario_1
